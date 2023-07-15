@@ -1,0 +1,25 @@
+# alert_rules.yml
+
+  - name: 'My Alert Rules'
+    rules:
+      - alert: HighErrorRate
+        expr: sum(rate(http_requests_total{job="my-app"}[5m])) by (status_code) > 100
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: High error rate detected
+          description: 'The HTTP error rate is above the threshold of 100 requests per second.'
+groups:
+  - name: 'My Alert Rules'
+    rules:
+      - alert: Using tool much memory
+        expr: node_memory_MemFree_bytes < 10000000
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          title: 'Instance {{$labels.instance}} is almost out of memory'
+          description: '{{$labels.instance}} of job {{$labels.job}} has been down'
+
+      # Add more alert rules as needed
